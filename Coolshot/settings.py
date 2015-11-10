@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',  # 需要将rest_framework加入到app列表
-    'users',
+    'cs_users',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -99,7 +99,7 @@ DATABASES = {
 # Internationalization
 # https://docs.djangoproject.com/en/1.8/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
 TIME_ZONE = 'Asia/Shanghai'
 
@@ -119,9 +119,7 @@ STATIC_URL = '/static/'
 # 这个值加上upload_to的值就是真实存放上传图片的文件位置；
 # Django里边文件内容实际上是不会存放到数据库里边的，大多数数据库存放数据效率低，
 # 需要保存在文件系统里。PS：FileUploads(用来存储文件)
-MEDIA_ROOT = (
-    os.path.join(BASE_DIR,  'media'),
-)
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # URL的映射，前后要加上‘/’ 表示从根目录开始，比如“/site_media/”，加上这个属性之后，静态文件的链接前面会加上这个值。
 MEDIA_URL = "/site_media/"
