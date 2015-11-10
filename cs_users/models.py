@@ -196,7 +196,7 @@ class PAsset(models.Model):
 
 
 # 全局的进度状态，连接给资产，项目，场，镜头，Task的进度状态另外写一个。
-# 0:未启动；1：已启动；2：已暂停；3：已取消；4：已完成
+# 0:未启动；1：已启动；2：已暂停；3：已取消；4：已完成，5：等待准备工作
 class GStatus(models.Model):
     gStatusName = models.CharField('GlobalStatusName', max_length=50)
     gStatusDescription = models.TextField('GlobalStatusDescription', blank=True, default='')
@@ -207,37 +207,47 @@ class GStatus(models.Model):
 
 
 class Task(models.Model):
-    # 属于哪个项目
-    tProject = models.IntegerField()
+    # 属于哪个项目,如果属于资产的话，这个可以不写
+    # 应该是项目和资产单选一个，应该在逻辑代码里实现这个,应该是在什么界面点出来，自动获取这前几行信息
+    tProject = models.IntegerField(max_length=50, blank=True, default='')
+    tAsset = models.IntegerField(blank=True, null=True)
+    # 是否属于一个镜头
     tIsShot = models.BooleanField()
+    # 如果属于镜头，是哪个镜头
     tShot = models.IntegerField(blank=True)
-    tAsset = models.IntegerField(blank=True)
+    # 任务的名字，应该有2d和3d的任务之分。我觉得这里也应该有逻辑判断
+    # 在什么界面点出啦的，连接到不同的选项
+    # 这个名字应该做个外键，分2d任务和3d任务
     tName = models.CharField(max_length=50)
     # tinyint
     tProcess = models.IntegerField()
-    # tinyint
+    # tinyint，这个做个外键，专门定义各种状态
     tTaskStatus = models.IntegerField()
-    # tiniint
+    # tiniint，连接到全局状态
     tStatus = models.IntegerField()
-    tIsDel = models.BooleanField()
+    # 是否删除
+    tIsDel = models.BooleanField(default=False)
     # 无最大值限定
-    tDescription = models.CharField(max_length=50, blank=True)
-    # tinyint
-    tPriority = models.IntegerField(blank=True)
-    # tinyint
-    tComplexity = models.IntegerField(blank=True)
-    tAssigned = models.IntegerField(blank=True)
+    tDescription = models.TextField(blank=True, default='')
+    # tinyint,优先级
+    tPriority = models.IntegerField(blank=True, null=True)
+    # tinyint，难度
+    tComplexity = models.IntegerField(blank=True, null=True)
+    # 将任务分配给谁，应该是个外键，连接到User，多对多的关系
+    tAssigned = models.ManyToManyField(OUsers)
+    # 应该也是个外键，应该连接到一个组（总监组）的其中的一个用户，多对多
     tSupervisor = models.IntegerField(blank=True)
-    tPreStartDate = models.DateTimeField(blank=True)
-    tPreEndDate = models.DateTimeField(blank=True)
+
     # 原来的类型是 decima（18，1）
-    tPreHours = models.DateTimeField(blank=True)
-    tStartDate = models.DateTimeField(blank=True)
-    tEndDate = models.DateTimeField(blank=True)
-    tSort = models.IntegerField(blank=True)
+    tPreHours = models.DateTimeField(blank=True, null=True)
+    tPreStartDate = models.DateField(blank=True, null=True)
+    tPreEndDate = models.DateField(blank=True, null=True)
+    tStartDate = models.DateField(blank=True, null=True)
+    tEndDate = models.DateField(blank=True, null=True)
+    tSort = models.IntegerField(blank=True, null=True)
 
     def __unicode__(self):
-        return self.pLongName
+        return self.tName
 
 
 class Shot(models.Model):
