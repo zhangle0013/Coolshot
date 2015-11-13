@@ -42,7 +42,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',  # 需要将rest_framework加入到app列表
-    'cs_users',
+
 )
 
 MIDDLEWARE_CLASSES = (
@@ -54,6 +54,13 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'django.middleware.security.SecurityMiddleware',
+    'commonly',
+    'project',
+    'asset',
+    'sequence',
+    'shot',
+    'task',
+    'version',
 )
 
 ROOT_URLCONF = 'Coolshot.urls'
